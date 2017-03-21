@@ -48,7 +48,8 @@ class SiteController extends CommonController implements CommonInterface{
     //登录欢迎页面
     public function actionWelcome(){
 
-        $userInfo=$this->getUserArray();//用户登录信息
+
+        $userInfo=Yii::$app->user->getIdentity();//用户登录信息
         $serviceInfo=array();//服务器信息
         
         $serviceInfo["serverName"]      =$_SERVER['SERVER_NAME'];           //服务器名称
@@ -105,6 +106,15 @@ class SiteController extends CommonController implements CommonInterface{
             
             //登录操作
             Yii::$app->user->login($userInfo, isset($postArray['remember']) ? 3600*24*30 : 0);
+            
+            $loginInfo=array(
+                "id"=>$userInfo->id,
+                "login_time"=>date("Y-m-d H:i:s"),
+                "login_ip"=>Yii::$app->request->getUserIP(),
+                "login_num"=>$userInfo->login_num+1,
+            );
+            $this->serviceList['UserService']->updateUser($loginInfo);
+            
             
             $this->result['status']=200;
             $this->result['info']="登录成功！";

@@ -15,18 +15,24 @@ class UserService extends CommonService{
         try {
             if(empty($params['id'])){
                 $sysUser=new SysUser();
+                $sysUser->createtime = date("Y-m-d H:i:s");
             }else{
                 $sysUser= SysUser::findOne($params['id']);
             }
             
-            if(!empty($params['password'])) $sysUser->password   =$params['password'];
-            if(!empty($params['nickname'])) $sysUser->nickname   =$params['nickname'];
-            if(!empty($params['sex']))      $sysUser->sex        =$params['sex'];
-            if(!empty($params['mobile']))   $sysUser->mobile     =$params['mobile'];
-            if(!empty($params['email']))    $sysUser->email      =$params['email'];
-            if(!empty($params['role']))     $sysUser->role       =$params['role'];
-            if(!empty($params['status']))   $sysUser->status     =$params['status'];
-            if(!empty($params['remark']))   $sysUser->remark     =$params['remark'];
+            if(!empty($params['username'])) $sysUser->username   =(string)$params['username'];
+            if(!empty($params['password'])) $sysUser->password   = md5 ($params['password']);
+            if(!empty($params['nickname'])) $sysUser->nickname   =(string)$params['nickname'];
+            if(!empty($params['sex']))      $sysUser->sex        =(string)$params['sex'];
+            if(!empty($params['mobile']))   $sysUser->mobile     =(string)$params['mobile'];
+            if(!empty($params['email']))    $sysUser->email      =(string)$params['email'];
+            if(!empty($params['role']))     $sysUser->role       =(string)$params['role'];
+            if(!empty($params['status']))   $sysUser->status     =(int)$params['status'];
+            if(!empty($params['remark']))   $sysUser->remark     =(string)$params['remark'];
+            
+            if(!empty($params['login_time']))     $sysUser->login_time   =(string)$params['login_time'];
+            if(!empty($params['login_ip']))       $sysUser->login_ip     =(string)$params['login_ip'];
+            if(!empty($params['login_num']))      $sysUser->login_num    =(int)$params['login_num'];
   
             if($sysUser->save()){
                 $this->result['status']=200;

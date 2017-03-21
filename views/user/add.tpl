@@ -9,7 +9,7 @@
     </head>
     <body>
         <article class="page-container">
-            <form action="" method="post" class="form form-horizontal" id="form-user-add">
+            <form id="userAdd" class="form form-horizontal"  action="" enctype="multipart/form-data" method="post">
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
                     <div class="formControls col-xs-8 col-sm-9">
@@ -20,14 +20,14 @@
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text"  name="" class="input-text" value="" placeholder="">
+                        <input type="password" id="password"  name="" class="input-text {required:true,messages:{required:'请填写密码！'}}" value="" placeholder="">
                     </div>
                 </div>
                 
                  <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text"  name="password" class="input-text" value="" placeholder="">
+                        <input type="password"  name="password" class="input-text {equalTo: '#password',messages:{equalTo:'两次密码不一致！'}} " value="" placeholder="">
                     </div>
                 </div>
                 <div style="height: 30px">
@@ -36,7 +36,7 @@
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text"  name="nickname" class="input-text" value="" placeholder="">
+                        <input type="text"  name="nickname" class="input-text {required:true,messages:{required:'请填写昵称！'}}" value="" placeholder="">
                     </div>
                 </div>
                 
@@ -48,7 +48,7 @@
                             <label for="sex-1">男</label>
                         </div>
                         <div class="radio-box">
-                            <input type="radio" value="女" id="sex-2" name="sex">
+                            <input name="sex" value="女" type="radio" id="sex-2" >
                             <label for="sex-2">女</label>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3">角色：</label>
                     <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
-                            <select class="select" size="1" name="city">
+                            <select class="select" size="1" name="role">
                                 <option value="" selected>请选择角色</option>
                                 <option value="1">角色1</option>
                                 <option value="2">角色2</option>
@@ -84,11 +84,11 @@
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>状态：</label>
                     <div class="formControls col-xs-8 col-sm-9 skin-minimal">
                         <div class="radio-box">
-                            <input name="sex" value="1" type="radio" id="sex-1" checked>
+                            <input name="status" value="1" type="radio" id="sex-1" checked>
                             <label for="sex-1">启用</label>
                         </div>
                         <div class="radio-box">
-                            <input type="radio" value="2" id="sex-2" name="sex">
+                            <input name="status" value="2" type="radio" id="sex-2">
                             <label for="sex-2">禁用</label>
                         </div>
                     </div>

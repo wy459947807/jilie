@@ -33,5 +33,8 @@ function deleteUser(id) {
 }
 
 ///添加用户
-
+function addUser(){
+    var reInfo = ajaxFormSubmit("#userAdd",'/user/add');
+    layer_tip(reInfo,1);//提示框
+}
 
