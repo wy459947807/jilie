@@ -2,20 +2,52 @@
 
 namespace app\service;
 
+use app\common\InstanceFactory;
 use app\models\SysNav;
 use app\service\CommonService;
 use Yii;
 use yii\db\Exception;
 class NavService extends CommonService{
+    
+    public function __construct (){
+        $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务 
+    }
+
+
     //更新菜单
     public function updateNav($params){
+        
+        $sysNav= SysNav::find()
+                ->where(['and',"name='{$params["name"]}'",['or',"type='view'","type='module'"]])
+                ->one();        
+        if(!empty($sysNav)){
+            $this->result['status']=500;
+            $this->result['info']="菜单名称重复！";    
+            return $this->result;
+        }
+
          //添加菜单操作
         $tr = Yii::$app->db->beginTransaction();//事务开始
         try {
             if(empty($params['id'])){
                 $sysNav=new SysNav();
+                
+                //权限管理
+                if(!empty($params['name'])){
+                    $permissionArray['name']=$params['name'];
+                    $permissionArray['description']=$params['remark'];
+                    $this->serviceList['Rbac']->createPermission($permissionArray);//创建访问许可
+                }
+                
             }else{
                 $sysNav= SysNav::findOne($params['id']);
+                
+                //权限管理
+                if(!empty($params['name'])){
+                    $permissionArray['name']=$params['name'];
+                    $permissionArray['description']=$params['remark'];
+                    $this->serviceList['Rbac']->updateRolePermission($sysNav->name,$permissionArray);//编辑访问许可
+                }
             }
             $sysNav->pid=$params['pid'];
             $sysNav->name=$params['name'];
@@ -49,6 +81,18 @@ class NavService extends CommonService{
         //删除菜单操作
         $tr = Yii::$app->db->beginTransaction();//事务开始
         try {
+            
+            $sysList = SysNav::find()
+                ->where(["in",'id',$params['id']])
+                ->all();        
+            
+            foreach ($sysList as $key=>$val){
+                if($val->type=="action"){
+                    $this->serviceList['Rbac']->delRolePermission($val->path);//删除许可
+                }else{
+                    $this->serviceList['Rbac']->delRolePermission($val->name);//删除许可
+                }
+            }
 
             $retInfo=SysNav::deleteAll(["in",'id',$params['id']]); 
             if($retInfo){
@@ -58,6 +102,7 @@ class NavService extends CommonService{
                 $this->result['status']=500;
                 $this->result['info']="删除失败！";
             }
+           
             $tr->commit();//事务提交
         } catch (Exception $e) {
             $tr->rollBack();//事务回滚

@@ -13,6 +13,7 @@ class NavController extends CommonController implements CommonInterface{
         parent::init();
         //注册服务
         $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
+        $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务
     }
     
     //列表信息

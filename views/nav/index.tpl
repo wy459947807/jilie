@@ -26,7 +26,7 @@
                             <th width="80">ID</th>
                             <th width="80">排序</th>
                             <th>模块名称</th>
-                            <th>模块路径</th>
+                            <th>模块描述</th>
                             <th width="100">操作</th>
                         </tr>
                     </thead>
@@ -38,7 +38,7 @@
                             <td><!--{$val.id}--></td>
                             <td><!--{$val.sort}--></td>
                             <td class="text-l"><!--{$val.name}--></td>
-                            <td class="text-l"><!--{$val.path}--></td>
+                            <td class="text-l"><!--{$val.remark}--></td>
                             <td class="f-14">
                                 <a title="编辑" href="javascript:;" onclick="layer_show('编辑栏目','/nav/edit?id=<!--{$val.id}-->')" style="text-decoration:none">
                                     <i class="Hui-iconfont">&#xe6df;</i>
@@ -55,7 +55,7 @@
                             <td><!--{$v.id}--></td>
                             <td><!--{$v.sort}--></td>
                             <td class="text-l">&nbsp;&nbsp;├&nbsp;<!--{$v.name}--></td>
-                            <td class="text-l"><!--{$v.path}--></td>
+                            <td class="text-l"><!--{$v.remark}--></td>
                             <td class="f-14">
                                 <a title="编辑" href="javascript:;" onclick="layer_show('编辑栏目','/nav/edit?id=<!--{$v.id}-->')" style="text-decoration:none">
                                     <i class="Hui-iconfont">&#xe6df;</i>

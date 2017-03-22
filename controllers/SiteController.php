@@ -146,8 +146,7 @@ class SiteController extends CommonController implements CommonInterface{
         $this->serviceList['Rbac']->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
         */
         
-       
-        
+     
         echo "vvv";
         return;
 

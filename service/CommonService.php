@@ -5,6 +5,7 @@ namespace app\service;
 use Yii;
 
 class CommonService {
+    public $serviceList=array();//服务列表
     public $result = array(
         "status" => 200, 
         "info" => "操作成功！",
