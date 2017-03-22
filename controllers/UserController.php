@@ -19,6 +19,7 @@ class UserController extends CommonController implements CommonInterface{
     public function actionIndex(){
         $params = $this->getParams();  //获取页面参数
         $resultInfo=$this->serviceList['UserService']->getUserList($params);
+        $resultInfo['data']['params']=$params;
         return $this->render('index.tpl',$resultInfo);
     }
     
@@ -38,10 +39,25 @@ class UserController extends CommonController implements CommonInterface{
         return $this->render('add.tpl',$resultInfo);
     }
 
-    //编辑导航
+    //编辑用户
     public function actionEdit(){
-        
-        $resultInfo=array();
+        //页面操作
+        if(Yii::$app->request->isPost){
+            $params=$this->getValidateParams('edit');
+            if($params['status']!=200){
+                return $this->asJson($params);
+            }
+            $this->result = $this->serviceList['UserService']->updateUser($params['data']);
+            return $this->asJson($this->result);
+        }
+  
+        //页面数据
+        $params=$this->getParams();
+        if(empty($params['id'])){
+            $this->redirect('/site/error');
+        }
+        $userInfo=$this->result = $this->serviceList['UserService']->getUserInfo($params);
+        $resultInfo['userInfo']=$userInfo['data'];
         return $this->render('edit.tpl',$resultInfo);
     }
 
@@ -67,6 +83,18 @@ class UserController extends CommonController implements CommonInterface{
             return $this->asJson($this->result);
         }
     }
+    
+    //获取用户信息
+    public function actionUserinfo(){
+        //页面数据
+        $params=$this->getValidateParams('userInfo');
+        if($params['status']!=200){
+            return $this->asJson($params);
+        }
+        $userInfo=$this->result = $this->serviceList['UserService']->getUserInfo($params['data']);
+        $this->result['data']=$userInfo['data'];
+        return $this->asJson($this->result);
+    }
 
     //获取参数规则
     public function getRulesArray($ruleIndex){
@@ -74,11 +102,20 @@ class UserController extends CommonController implements CommonInterface{
             array('status', 'in', 'range'=>array(1,2),'message'=>'状态码错误.'),  
         ); 
         
+        $result['edit']=array(
+            array('id','required','message'=>'id必须！'), 
+        );
+        
         $result['delete']=array(
             array('id','required','message'=>'id必须！'), 
         );
         
+        $result['userInfo']=array(
+            array('id','required','message'=>'id必须！'), 
+        );
+
         $result['updatestatus']=array(  
+            array('id','required','message'=>'id必须！'), 
             array('status', 'in', 'range'=>array(1,2),'message'=>'状态码错误.'),  
         ); 
         

@@ -14,7 +14,7 @@ class SiteController extends CommonController implements CommonInterface{
         return [
             'access' => [
                 'class' => AccessControl::className(), //登录状态过滤器
-                'except' => ['captcha','login','error'],   
+                'except' => ['captcha','login','error','test'],   
                 'rules' => [
                         [
                         'actions' => ['logout', 'index','welcome'],
@@ -32,6 +32,7 @@ class SiteController extends CommonController implements CommonInterface{
         //注册服务
         $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
         $this->serviceList['UserService']=InstanceFactory::getInstance("app\service\UserService");//用户服务
+        $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务
     }
     
     
@@ -132,6 +133,21 @@ class SiteController extends CommonController implements CommonInterface{
     
     //测试页面
     public function actionTest() {
+        /*
+        $this->serviceList['Rbac']->createPermission(array("name"=>"/666/777","description"=>"简单描述1"));//创建访问许可
+        $this->serviceList['Rbac']->createRole(array("name"=>"普通用户","description"=>"简单描述2"));//创建角色
+        $this->serviceList['Rbac']->createEmpowerment("普通用户","/666/777");//给角色分配许可
+        $this->serviceList['Rbac']->assign("普通用户",3);//给角色分配用户
+       
+        $this->serviceList['Rbac']->delAssign("普通用户",3);//取消用户分配
+        $this->serviceList['Rbac']->delEmpowerment("普通用户","/666/777");//删除角色许可
+        $this->serviceList['Rbac']->delRolePermission("/666/777");//删除许可
+        $this->serviceList['Rbac']->delRolePermission("普通用户");//删除角色
+        $this->serviceList['Rbac']->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
+        */
+        
+       
+        
         echo "vvv";
         return;
 

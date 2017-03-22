@@ -163,7 +163,7 @@ function getLayerTemplate(winId,width,height,title,zIndex){
         title: title,
         shadeClose: true,
         zIndex: zIndex,
-        shade: 0.8,
+        shade: 0.3,
         area: [width+'px', height+'px'],
         content: $('#'+winId)
     }); 

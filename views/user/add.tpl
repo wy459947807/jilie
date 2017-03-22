@@ -9,7 +9,7 @@
     </head>
     <body>
         <article class="page-container">
-            <form id="userAdd" class="form form-horizontal"  action="" enctype="multipart/form-data" method="post">
+            <form id="addUser" class="form form-horizontal"  action="" enctype="multipart/form-data" method="post">
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
                     <div class="formControls col-xs-8 col-sm-9">

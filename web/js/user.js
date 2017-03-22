@@ -34,7 +34,26 @@ function deleteUser(id) {
 
 ///添加用户
 function addUser(){
-    var reInfo = ajaxFormSubmit("#userAdd",'/user/add');
+    var reInfo = ajaxFormSubmit("#addUser",'/user/add');
     layer_tip(reInfo,1);//提示框
 }
+
+///编辑用户
+function editUser(){
+    var reInfo = ajaxFormSubmit("#editUser",'/user/edit');
+    layer_tip(reInfo,1);//提示框
+}
+
+//修改密码
+function changePassword(){
+    var reInfo = ajaxFormSubmit("#changePassword",'/user/edit');
+    layer_tip(reInfo,1);//提示框
+}
+
+function changePasswordBox(dataInfo){
+    getTemplate(dataInfo,'/user/userinfo',"changePasswordBox","changePassword_tpl");
+    getLayerTemplate("changePasswordBox",500,300,"修改密码",1000);
+    initSubmitForm("#changePassword");   //初始化表单
+}
+
 

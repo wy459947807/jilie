@@ -1,3 +1,4 @@
+<!--{if $data.num>0}-->
 <div class="page"> 
     <div class="dataTables_wrapper">       
         <div class="dataTables_info"  role="status" aria-live="polite">显示 <!--{($data.page-1)*$data.pageLimit}--> 到 <!--{$data.page*$data.pageLimit}--> ，共 <!--{$data.num}--> 条</div>        
@@ -23,7 +24,10 @@
             <!--{/if}-->
         </div>
     </div>
-</div> 
+</div>
+<!--{else}-->
+<div style="width:100%; text-align: center; padding: 50px" >暂无数据！</div>
+<!--{/if}-->
 <script type="text/javascript" src="/lib/public/LG.js"></script>
 <script>
     function jumpPage(page){

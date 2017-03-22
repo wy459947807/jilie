@@ -82,10 +82,10 @@ class UserService extends CommonService{
        
         //搜索信息筛选
         if(!empty($params['searchInfo'])){
-            $this->sqlWhere.=" and (nickname like '%:nickname%' or mobile like '%:mobile%' or email like '%:email%')  ";
-            $this->bindValues[':nickname'] = $params['searchInfo'];
-            $this->bindValues[':mobile']   = $params['searchInfo'];
-            $this->bindValues[':email']    = $params['searchInfo'];
+            $this->sqlWhere.=" and (nickname like :nickname or mobile like :mobile or email like :email)  ";
+            $this->bindValues[":nickname"] = "%".$params['searchInfo']."%";
+            $this->bindValues[":mobile"]   = "%".$params['searchInfo']."%";
+            $this->bindValues[":email"]    = "%".$params['searchInfo']."%";
         }
         
         //创建时间筛选
@@ -95,6 +95,24 @@ class UserService extends CommonService{
             $this->bindValues[':endTime']  = $params['endTime'];
         }
         return $this->getPageList();
+    }
+    
+     //获取用户列表
+    public function getUserInfo($params){
+        $this->sqlFrom=" sys_user ";        
+        $this->sqlField=" * ";       
+        $this->sqlWhere=" (1=1) ";
+        $this->bindValues=array();
+        
+        
+        //条件筛选
+        if(!empty($params['id'])){
+            $this->sqlWhere.=" and id=:id ";
+            $this->bindValues[':id'] = $params['id'];
+        }
+        
+        return $this->getOne();
+        
     }
     
 

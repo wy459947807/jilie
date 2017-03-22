@@ -115,7 +115,7 @@ class SysUser extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public static function findByUsername($username)
     {
         $user = static::find()
-            ->where(['username' => $username])
+            ->where(['username' => $username,"status"=>1])
             ->asArray()
             ->one();
 
