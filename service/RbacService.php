@@ -2,7 +2,6 @@
 
 namespace app\service;
 
-use app\common\InstanceFactory;
 use app\models\SysNav;
 use app\service\CommonService;
 use Yii;
@@ -10,7 +9,7 @@ use yii\db\Exception;
 class RbacService extends CommonService{
     
     public function __construct (){
-         $this->registInstance("Rbac","app\common\\");//注册权限管理实例
+         $this->registService("Rbac","app\common\\");//注册权限管理实例
     }
 
 
@@ -37,7 +36,7 @@ class RbacService extends CommonService{
                 if(!empty($params['path'])){
                     $permissionArray['name']=$params['path'];
                     $permissionArray['description']=$params['remark'];
-                    $this->getInstance("Rbac")->createPermission($permissionArray);//创建访问许可
+                    $this->getService("Rbac")->createPermission($permissionArray);//创建访问许可
                 }
                 
             }else{
@@ -47,7 +46,7 @@ class RbacService extends CommonService{
                 if(!empty($params['path'])){
                     $permissionArray['name']=$params['path'];
                     $permissionArray['description']=$params['remark'];
-                    $this->getInstance("Rbac")->updateRolePermission($sysNav->path,$permissionArray);//编辑访问许可
+                    $this->getService("Rbac")->updateRolePermission($sysNav->path,$permissionArray);//编辑访问许可
                 }
             }
            
@@ -88,9 +87,9 @@ class RbacService extends CommonService{
             
             foreach ($sysList as $key=>$val){
                 if($val->type=="action"){
-                    $this->getInstance("Rbac")->delRolePermission($val->path);//删除许可
+                    $this->getService("Rbac")->delRolePermission($val->path);//删除许可
                 }else{
-                    $this->getInstance("Rbac")->delRolePermission($val->name);//删除许可
+                    $this->getService("Rbac")->delRolePermission($val->name);//删除许可
                 }
             }
 

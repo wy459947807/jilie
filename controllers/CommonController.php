@@ -15,7 +15,7 @@ use app\common\Rbac;
 use app\common\InstanceFactory;
 
 class CommonController extends Controller {
-    public $instanceList=array();//服务列表
+    public $serviceList=array();//服务列表
     public $layout = false; //禁用yii默认布局
     public $result = array(
         "status" => 200, 
@@ -205,14 +205,14 @@ class CommonController extends Controller {
     }
     
     //注册实例
-    public function registInstance($instanceName,$nameSpace="app\service\\"){
-        $this->instanceList[$instanceName]=InstanceFactory::getInstance($nameSpace.$instanceName);
+    public function registService($serviceName,$nameSpace="app\service\\"){
+        $this->serviceList[$serviceName]=InstanceFactory::getInstance($nameSpace.$serviceName);
     }
     
     //获取实例
-    public function getInstance($instanceName){
-        if(isset($this->instanceList[$instanceName])){
-            return $this->instanceList[$instanceName];
+    public function getService($serviceName){
+        if(isset($this->serviceList[$serviceName])){
+            return $this->serviceList[$serviceName];
         }
         return;
     }

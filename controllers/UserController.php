@@ -9,13 +9,13 @@ class UserController extends CommonController implements CommonInterface{
     public function init(){
         parent::init();
         //注册服务
-        $this->registInstance("UserService");//注册用户服务
+        $this->registService("UserService");//注册用户服务
     }
     
     //列表信息
     public function actionIndex(){
         $params = $this->getParams();  //获取页面参数
-        $resultInfo=$this->getInstance("UserService")->getUserList($params);
+        $resultInfo=$this->getService("UserService")->getUserList($params);
         $resultInfo['data']['params']=$params;
         return $this->render('index.tpl',$resultInfo);
     }
@@ -28,7 +28,7 @@ class UserController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->getInstance("UserService")->updateUser($params['data']);
+            $this->result = $this->getService("UserService")->updateUser($params['data']);
             return $this->asJson($this->result);
         }
         
@@ -44,7 +44,7 @@ class UserController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->getInstance("UserService")->updateUser($params['data']);
+            $this->result = $this->getService("UserService")->updateUser($params['data']);
             return $this->asJson($this->result);
         }
   
@@ -53,7 +53,7 @@ class UserController extends CommonController implements CommonInterface{
         if(empty($params['id'])){
             $this->redirect('/site/error');
         }
-        $userInfo=$this->result = $this->getInstance("UserService")->getUserInfo($params);
+        $userInfo=$this->result = $this->getService("UserService")->getUserInfo($params);
         $resultInfo['userInfo']=$userInfo['data'];
         return $this->render('edit.tpl',$resultInfo);
     }
@@ -65,7 +65,7 @@ class UserController extends CommonController implements CommonInterface{
             return $this->asJson($params);
         }
         
-        $this->result = $this->getInstance("UserService")->deleteUser($params['data']);
+        $this->result = $this->getService("UserService")->deleteUser($params['data']);
         return $this->asJson($this->result);
     }
     
@@ -76,7 +76,7 @@ class UserController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->getInstance("UserService")->updateUser($params['data']);
+            $this->result = $this->getService("UserService")->updateUser($params['data']);
             return $this->asJson($this->result);
         }
     }
@@ -88,7 +88,7 @@ class UserController extends CommonController implements CommonInterface{
         if($params['status']!=200){
             return $this->asJson($params);
         }
-        $userInfo=$this->result = $this->getInstance("UserService")->getUserInfo($params['data']);
+        $userInfo=$this->result = $this->getService("UserService")->getUserInfo($params['data']);
         $this->result['data']=$userInfo['data'];
         return $this->asJson($this->result);
     }
