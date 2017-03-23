@@ -2,32 +2,30 @@
 //导航管理
 namespace app\controllers;
 
-use app\common\InstanceFactory;
 use Yii;
-use yii\db;
-use yii\db\Exception;
+
 class RbacController extends CommonController implements CommonInterface{
 
     public function init(){
         parent::init();
         //注册服务
-        $this->serviceList['RbacService']=InstanceFactory::getInstance("app\service\RbacService");//权限服务
-        $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
+        $this->registInstance("RbacService");//注册权限验证服务
+        $this->registInstance("NavService");//注册菜单服务
     }
     
     //列表信息
     public function actionIndex(){
         $params = $this->getParams();  //获取页面参数
-        $moduleList=$this->serviceList['NavService']->getList(array("type"=>"module"));
-        $viewList=$this->serviceList['NavService']->getList(array("pid"=>$moduleList['data'][0]['id']));
+        $moduleList=$this->getInstance("NavService")->getList(array("type"=>"module"));
+        $viewList=$this->getInstance("NavService")->getList(array("pid"=>$moduleList['data'][0]['id']));
         if(!empty($params['module'])){
-            $viewList=$this->serviceList['NavService']->getList(array("pid"=>$params['module'])); 
+            $viewList=$this->getInstance("NavService")->getList(array("pid"=>$params['module'])); 
         }
         $params['pid']=$viewList['data'][0]['id']; 
         if(!empty($params['view'])){
             $params['pid']=$params['view'];
         }
-        $resultInfo=$this->serviceList['RbacService']->getRbacList($params);
+        $resultInfo=$this->getInstance("RbacService")->getRbacList($params);
         $resultInfo['data']['params']=$params;
         $resultInfo['data']['moduleList']=$moduleList['data'];
         $resultInfo['data']['viewList']=$viewList['data'];
@@ -43,7 +41,7 @@ class RbacController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['RbacService']->updateRbac($params['data']);
+            $this->result = $this->getInstance("RbacService")->updateRbac($params['data']);
             return $this->asJson($this->result);
         }
 
@@ -64,7 +62,7 @@ class RbacController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['RbacService']->updateRbac($params['data']);
+            $this->result = $this->getInstance("RbacService")->updateRbac($params['data']);
             return $this->asJson($this->result);
         }
         
@@ -75,7 +73,7 @@ class RbacController extends CommonController implements CommonInterface{
         if(empty($params['pid'])){
             $this->redirect('/site/error');
         }
-        $rbacInfo = $this->serviceList['RbacService']->getRbacInfo($params);
+        $rbacInfo = $this->getInstance("RbacService")->getRbacInfo($params);
         $resultInfo["params"]=$params;
         $resultInfo["rbacInfo"]=$rbacInfo['data'];
         return $this->render('edit.tpl',$resultInfo);
@@ -89,7 +87,7 @@ class RbacController extends CommonController implements CommonInterface{
             return $this->asJson($params);
         }
         
-        $this->result = $this->serviceList['RbacService']->deleteRbac($params['data']);
+        $this->result = $this->getInstance("RbacService")->deleteRbac($params['data']);
         return $this->asJson($this->result);
 
     }

@@ -3,21 +3,19 @@
 namespace app\controllers;
 
 use app\models\SysNav;
-use app\common\InstanceFactory;
 use Yii;
-use yii\db;
-use yii\db\Exception;
+
 class NavController extends CommonController implements CommonInterface{
 
     public function init(){
         parent::init();
         //注册服务
-        $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
+        $this->registInstance("NavService");//菜单服务
     }
     
     //列表信息
     public function actionIndex(){
-        $navList=$this->serviceList['NavService']->getNavList();//获取菜单列表
+        $navList=$this->getInstance("NavService")->getNavList();//获取菜单列表
         $navArray=$this->objectsToArrays($navList['data']);//类型转换
         $navTree=$this->getListTree($navArray);
         $resultInfo['navTree']=$navTree; 
@@ -34,12 +32,12 @@ class NavController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['NavService']->updateNav($params['data']);
+            $this->result = $this->getInstance("NavService")->updateNav($params['data']);
             return $this->asJson($this->result);
         }
         
         $navIcon=Yii::$app->params['navIcon'];//获取图标列表
-        $moduleList=$this->serviceList['NavService']->getModuleList();//获取模块列表
+        $moduleList=$this->getInstance("NavService")->getModuleList();//获取模块列表
         $resultInfo['moduleList']=$this->objectsToArrays($moduleList['data']);//类型转换
         $resultInfo['navIcon']=$navIcon;
         return $this->render('add.tpl',$resultInfo);
@@ -53,7 +51,7 @@ class NavController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['NavService']->updateNav($params['data']);
+            $this->result = $this->getInstance("NavService")->updateNav($params['data']);
             return $this->asJson($this->result);
         }
 
@@ -67,7 +65,7 @@ class NavController extends CommonController implements CommonInterface{
             $this->redirect('/site/error');
         }
         $navIcon=Yii::$app->params['navIcon'];//获取图标列表
-        $moduleList=$this->serviceList['NavService']->getModuleList();//获取模块列表
+        $moduleList=$this->getInstance("NavService")->getModuleList();//获取模块列表
         $resultInfo['moduleList']=$this->objectsToArrays($moduleList['data']);//类型转换
         $resultInfo['navIcon']=$navIcon;
         $resultInfo['navInfo']=$navInfo ;
@@ -82,7 +80,7 @@ class NavController extends CommonController implements CommonInterface{
             return $this->asJson($params);
         }
         
-        $this->result = $this->serviceList['NavService']->deleteNav($params['data']);
+        $this->result = $this->getInstance("NavService")->deleteNav($params['data']);
         return $this->asJson($this->result);
 
     }

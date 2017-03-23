@@ -12,9 +12,10 @@ use yii\httpclient\Client;
 use yii\httpclient\Request;
 use yii\httpclient\RequestEvent;
 use app\common\Rbac;
+use app\common\InstanceFactory;
 
 class CommonController extends Controller {
-    public $serviceList=array();//服务列表
+    public $instanceList=array();//服务列表
     public $layout = false; //禁用yii默认布局
     public $result = array(
         "status" => 200, 
@@ -203,7 +204,19 @@ class CommonController extends Controller {
         return $mapArray;
     }
     
-  
+    //注册实例
+    public function registInstance($instanceName,$nameSpace="app\service\\"){
+        $this->instanceList[$instanceName]=InstanceFactory::getInstance($nameSpace.$instanceName);
+    }
     
+    //获取实例
+    public function getInstance($instanceName){
+        if(isset($this->instanceList[$instanceName])){
+            return $this->instanceList[$instanceName];
+        }
+        return;
+    }
+    
+  
 
 }

@@ -2,10 +2,9 @@
 
 namespace app\controllers;
 
-use app\common\InstanceFactory;
 use app\common\ValidateCode;
 use app\models\SysUser;
-use app\models\SysNav;
+
 use Yii;
 use yii\filters\AccessControl;
 class SiteController extends CommonController implements CommonInterface{
@@ -30,17 +29,16 @@ class SiteController extends CommonController implements CommonInterface{
     
     public function init(){
         parent::init();
-        //注册服务
-        $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
-        $this->serviceList['UserService']=InstanceFactory::getInstance("app\service\UserService");//用户服务
-        $this->serviceList['RbacService']=InstanceFactory::getInstance("app\service\RbacService");//用户服务
-        $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务
+        $this->registInstance("NavService");//注册权限验证服务
+        $this->registInstance("UserService");//注册菜单服务
+        $this->registInstance("RbacService");//注册权限验证服务
+        $this->registInstance("Rbac","app\common\\");//注册菜单服务
     }
     
     
     public function actionIndex(){
         $navIcon=Yii::$app->params['navIcon'];//获取图标列表
-        $navList=$this->serviceList['NavService']->getNavList();//获取菜单列表
+        $navList=$this->getInstance("NavService")->getNavList();//获取菜单列表
         $navArray=$this->objectsToArrays($navList['data']);//类型转换
         $navTree=$this->getListTree($navArray);
         $resultInfo['navIcon']=$navIcon;
@@ -116,7 +114,7 @@ class SiteController extends CommonController implements CommonInterface{
                 "login_ip"=>Yii::$app->request->getUserIP(),
                 "login_num"=>$userInfo->login_num+1,
             );
-            $this->serviceList['UserService']->updateUser($loginInfo);
+            $this->getInstance("UserService")->updateUser($loginInfo);
             
             
             $this->result['status']=200;
@@ -136,19 +134,22 @@ class SiteController extends CommonController implements CommonInterface{
     //测试页面
     public function actionTest() {
         /*
-        $this->serviceList['Rbac']->createPermission(array("name"=>"/666/777","description"=>"简单描述1"));//创建访问许可
-        $this->serviceList['Rbac']->createRole(array("name"=>"普通用户","description"=>"简单描述2"));//创建角色
-        $this->serviceList['Rbac']->createEmpowerment("普通用户","/666/777");//给角色分配许可
-        $this->serviceList['Rbac']->assign("普通用户",3);//给角色分配用户
+        $this->getInstance("Rbac")->createPermission(array("name"=>"/666/777","description"=>"简单描述1"));//创建访问许可
+        $this->getInstance("Rbac")->createRole(array("name"=>"普通用户","description"=>"简单描述2"));//创建角色
+        $this->getInstance("Rbac")->createEmpowerment("普通用户","/666/777");//给角色分配许可
+        $this->getInstance("Rbac")->assign("普通用户",3);//给角色分配用户
        
-        $this->serviceList['Rbac']->delAssign("普通用户",3);//取消用户分配
-        $this->serviceList['Rbac']->delEmpowerment("普通用户","/666/777");//删除角色许可
-        $this->serviceList['Rbac']->delRolePermission("/666/777");//删除许可
-        $this->serviceList['Rbac']->delRolePermission("普通用户");//删除角色
-        $this->serviceList['Rbac']->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
+        $this->getInstance("Rbac")->delAssign("普通用户",3);//取消用户分配
+        $this->getInstance("Rbac")->delEmpowerment("普通用户","/666/777");//删除角色许可
+        $this->getInstance("Rbac")->delRolePermission("/666/777");//删除许可
+        $this->getInstance("Rbac")->delRolePermission("普通用户");//删除角色
+        $this->getInstance("Rbac")->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
         */
         
-
+        $this->registInstance("NavService");
+        $navList=$this->getInstance("NavService")->getModuleList();
+        var_dump($navList);
+        
         echo "vvv";
         return;
 

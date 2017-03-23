@@ -57,4 +57,20 @@ class CommonService {
         return $this->result;  
     }
     
+    
+   
+    //注册实例
+    public function registInstance($instanceName,$nameSpace="app\service\\"){
+        $this->instanceList[$instanceName]=InstanceFactory::getInstance($nameSpace.$instanceName);
+    }
+    
+    //获取实例
+    public function getInstance($instanceName){
+        if(isset($this->instanceList[$instanceName])){
+            return $this->instanceList[$instanceName];
+        }
+        return;
+    }
+    
+    
 }
