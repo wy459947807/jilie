@@ -228,3 +228,15 @@ function getUrlParam(name, url) {
     return !match ? '' : match[1];
 }
 
+//页面跳转
+function jumpPage(dataInfo){
+    var myurl=new LG.URL(window.location.href);
+
+    for (var index in dataInfo){
+        myurl.set(index,dataInfo[index]);
+    }
+
+    //alert (myurl.url());
+    window.location.href=myurl.url();
+}
+

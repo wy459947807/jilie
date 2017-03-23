@@ -7,22 +7,22 @@ use app\models\SysNav;
 use app\service\CommonService;
 use Yii;
 use yii\db\Exception;
-class NavService extends CommonService{
+class RbacService extends CommonService{
     
     public function __construct (){
         $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务 
     }
 
 
-    //更新菜单
-    public function updateNav($params){
+    //更新权限
+    public function updateRbac($params){
         if(empty($params['id'])){
             $sysNav= SysNav::find()
-                    ->where(['and',"name='{$params["name"]}'",['or',"type='view'","type='module'"]])
+                    ->where(['and',"path='{$params["path"]}'","type='action'"])
                     ->one();        
             if(!empty($sysNav)){
                 $this->result['status']=500;
-                $this->result['info']="菜单名称重复！";    
+                $this->result['info']="操作路径重复！";    
                 return $this->result;
             }
         }
@@ -34,8 +34,8 @@ class NavService extends CommonService{
                 $sysNav=new SysNav();
                 
                 //权限管理
-                if(!empty($params['name'])){
-                    $permissionArray['name']=$params['name'];
+                if(!empty($params['path'])){
+                    $permissionArray['name']=$params['path'];
                     $permissionArray['description']=$params['remark'];
                     $this->serviceList['Rbac']->createPermission($permissionArray);//创建访问许可
                 }
@@ -44,27 +44,24 @@ class NavService extends CommonService{
                 $sysNav= SysNav::findOne($params['id']);
                 
                 //权限管理
-                if(!empty($params['name'])){
-                    $permissionArray['name']=$params['name'];
+                if(!empty($params['path'])){
+                    $permissionArray['name']=$params['path'];
                     $permissionArray['description']=$params['remark'];
-                    $this->serviceList['Rbac']->updateRolePermission($sysNav->name,$permissionArray);//编辑访问许可
+                    $this->serviceList['Rbac']->updateRolePermission($sysNav->path,$permissionArray);//编辑访问许可
                 }
             }
-            if(!empty($params['pid']))      $sysNav->pid=   $params['pid'];
-            if(!empty($params['name']))     $sysNav->name=  $params['name'];
-            if(!empty($params['icon']))     $sysNav->icon=  $params['icon'];
-            if(!empty($params['path']))     $sysNav->path=  $params['path'];
-            if(!empty($params['status']))   $sysNav->status=$params['status'];
-            if(!empty($params['sort']))     $sysNav->sort=  $params['sort'];
-            if(!empty($params['remark']))   $sysNav->remark=$params['remark'];
+           
             
-            if(!empty($params['type'])){
-                $sysNav->type= $params['type'];
-            }else{
-                $sysNav->type=  $params['pid']?"view":"module"; 
-            }
-
-        
+            if(!empty($params['pid']))      $sysNav->pid=   (int)$params['pid'];
+            if(!empty($params['name']))     $sysNav->name=  (string)$params['name'];
+            if(!empty($params['icon']))     $sysNav->icon=  (int)$params['icon'];
+            if(!empty($params['path']))     $sysNav->path=  (string)$params['path'];
+            if(!empty($params['status']))   $sysNav->status=(int)$params['status'];
+            if(!empty($params['sort']))     $sysNav->sort=  (int)$params['sort'];
+            if(!empty($params['remark']))   $sysNav->remark=(string)$params['remark'];
+            
+            $sysNav->type= "action";
+            
             if($sysNav->save()){
                 $this->result['status']=200;
                 $this->result['info']="修改成功！";
@@ -79,8 +76,8 @@ class NavService extends CommonService{
         return $this->result;
     }
     
-    //删除菜单
-    public function deleteNav($params){
+    //删除权限
+    public function deleteRbac($params){
         //删除菜单操作
         $tr = Yii::$app->db->beginTransaction();//事务开始
         try {
@@ -114,53 +111,41 @@ class NavService extends CommonService{
         return $this->result;
     }
     
-    //获取菜单列表
-    public function getNavList(){
-        $navList=SysNav::find()
-                ->where(['and','status=1',['or',"type='view'","type='module'"]])
-                ->orderBy('sort asc')
-                ->all();
-       
-        $this->result['data']=$navList;
-        return $this->result;
-    }
-    
-    //获取模块列表
-    public function getModuleList(){
-        $moduleList=SysNav::find()
-                 ->where(['and','status=1',"type='module'"])
-                 ->orderBy('sort asc')           
-                 ->all(); 
-        
-        $this->result['data']=$moduleList;
-        return $this->result;
-         
-    }
-    
-    
-    //获取条件筛选列表
-    public function getList($params){
+    //获取权限列表
+    public function getRbacList($params){
+        $this->pageLimit=10;       
         $this->sqlFrom=" sys_nav ";        
         $this->sqlField=" * ";       
-        $this->sqlWhere=" (1=1) ";
-        $this->sqlOrder=" order by sort asc ";
+        $this->sqlWhere=" (1=1) and type='action' ";
         $this->bindValues=array();
         
-        
-        //条件筛选
+        if(!empty($params['page'])) $this->page = $params['page'];
+        if(!empty($params['pageLimit'])) $this->pageLimit = $params['pageLimit'];
+       
+        //列表筛选
         if(!empty($params['pid'])){
             $this->sqlWhere.=" and pid=:pid ";
             $this->bindValues[':pid'] = $params['pid'];
         }
-        
-        if(!empty($params['type'])){
-            $this->sqlWhere.=" and type=:type ";
-            $this->bindValues[':type'] = $params['type'];
-        }
-        
-        return $this->getAll();
+        return $this->getPageList();
     }
     
-   
+    //获取用户列表
+    public function getRbacInfo($params){
+        $this->sqlFrom=" sys_nav ";        
+        $this->sqlField=" * ";       
+        $this->sqlWhere=" (1=1) ";
+        $this->bindValues=array();
+        
+        
+        //条件筛选
+        if(!empty($params['id'])){
+            $this->sqlWhere.=" and id=:id ";
+            $this->bindValues[':id'] = $params['id'];
+        }
+        
+        return $this->getOne();
+        
+    }
     
 }

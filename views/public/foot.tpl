@@ -10,6 +10,7 @@
 <script type="text/javascript" src="/lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
 <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script> 
 <script type="text/javascript" src="/lib/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="/lib/public/LG.js"></script>
 <script type="text/javascript" src="/lib/public/common.js"></script> 
 <script type="text/javascript" src="/lib/public/commonp.plug.js"></script> 
 <script type="text/javascript" src="/static/h-ui/js/H-ui.js"></script> 

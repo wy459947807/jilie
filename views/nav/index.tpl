@@ -25,15 +25,15 @@
                             <th width="25"><input type="checkbox" name="" value=""></th>
                             <th width="80">ID</th>
                             <th width="80">排序</th>
-                            <th>模块名称</th>
-                            <th>模块描述</th>
+                            <th>菜单名称</th>
+                            <th>菜单描述</th>
                             <th width="100">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         
                         <!--{foreach $navTree.list as $key=>$val}-->
-                        <tr class="text-c">
+                        <tr class="text-c module">
                             <td><input type="checkbox" name="id[]" value="<!--{$val.id}-->"></td>
                             <td><!--{$val.id}--></td>
                             <td><!--{$val.sort}--></td>
@@ -50,7 +50,7 @@
                         </tr>
                         <!--{if !empty($val['child']['list'])}-->
                         <!--{foreach $val.child.list as $k=>$v}-->
-                        <tr class="text-c list_<!--{$val.id}-->">
+                        <tr class="text-c view_<!--{$val.id}-->">
                             <td><input type="checkbox" name="id[]" value="<!--{$v.id}-->"></td>
                             <td><!--{$v.id}--></td>
                             <td><!--{$v.sort}--></td>

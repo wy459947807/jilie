@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\common\InstanceFactory;
 use app\common\ValidateCode;
 use app\models\SysUser;
+use app\models\SysNav;
 use Yii;
 use yii\filters\AccessControl;
 class SiteController extends CommonController implements CommonInterface{
@@ -32,6 +33,7 @@ class SiteController extends CommonController implements CommonInterface{
         //注册服务
         $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
         $this->serviceList['UserService']=InstanceFactory::getInstance("app\service\UserService");//用户服务
+        $this->serviceList['RbacService']=InstanceFactory::getInstance("app\service\RbacService");//用户服务
         $this->serviceList['Rbac']=InstanceFactory::getInstance("app\common\Rbac");//用户服务
     }
     
@@ -146,7 +148,7 @@ class SiteController extends CommonController implements CommonInterface{
         $this->serviceList['Rbac']->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
         */
         
-     
+
         echo "vvv";
         return;
 

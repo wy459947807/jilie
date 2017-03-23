@@ -2,26 +2,35 @@
 //导航管理
 namespace app\controllers;
 
-use app\models\SysNav;
 use app\common\InstanceFactory;
 use Yii;
 use yii\db;
 use yii\db\Exception;
-class NavController extends CommonController implements CommonInterface{
+class RbacController extends CommonController implements CommonInterface{
 
     public function init(){
         parent::init();
         //注册服务
+        $this->serviceList['RbacService']=InstanceFactory::getInstance("app\service\RbacService");//权限服务
         $this->serviceList['NavService']=InstanceFactory::getInstance("app\service\NavService");//菜单服务
     }
     
     //列表信息
     public function actionIndex(){
-        $navList=$this->serviceList['NavService']->getNavList();//获取菜单列表
-        $navArray=$this->objectsToArrays($navList['data']);//类型转换
-        $navTree=$this->getListTree($navArray);
-        $resultInfo['navTree']=$navTree; 
-        $resultInfo['navCount']=count($navArray);
+        $params = $this->getParams();  //获取页面参数
+        $moduleList=$this->serviceList['NavService']->getList(array("type"=>"module"));
+        $viewList=$this->serviceList['NavService']->getList(array("pid"=>$moduleList['data'][0]['id']));
+        if(!empty($params['module'])){
+            $viewList=$this->serviceList['NavService']->getList(array("pid"=>$params['module'])); 
+        }
+        $params['pid']=$viewList['data'][0]['id']; 
+        if(!empty($params['view'])){
+            $params['pid']=$params['view'];
+        }
+        $resultInfo=$this->serviceList['RbacService']->getRbacList($params);
+        $resultInfo['data']['params']=$params;
+        $resultInfo['data']['moduleList']=$moduleList['data'];
+        $resultInfo['data']['viewList']=$viewList['data'];
         return $this->render('index.tpl',$resultInfo);
     }
     
@@ -34,43 +43,41 @@ class NavController extends CommonController implements CommonInterface{
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['NavService']->updateNav($params['data']);
+            $this->result = $this->serviceList['RbacService']->updateRbac($params['data']);
             return $this->asJson($this->result);
         }
-        
-        $navIcon=Yii::$app->params['navIcon'];//获取图标列表
-        $moduleList=$this->serviceList['NavService']->getModuleList();//获取模块列表
-        $resultInfo['moduleList']=$this->objectsToArrays($moduleList['data']);//类型转换
-        $resultInfo['navIcon']=$navIcon;
+
+        $params = $this->getParams();  //获取页面参数
+        if(empty($params['pid'])){
+            $this->redirect('/site/error');
+        }
+        $resultInfo["params"]=$params;
         return $this->render('add.tpl',$resultInfo);
     }
 
     //编辑导航
     public function actionEdit(){
-        //添加操作
+        
+        //页面操作
         if(Yii::$app->request->isPost){
             $params=$this->getValidateParams('add');
             if($params['status']!=200){
                 return $this->asJson($params);
             }
-            $this->result = $this->serviceList['NavService']->updateNav($params['data']);
+            $this->result = $this->serviceList['RbacService']->updateRbac($params['data']);
             return $this->asJson($this->result);
         }
-
-        //页面数据
-        $params=$this->getParams();
+        
+        $params = $this->getParams();  //获取页面参数
         if(empty($params['id'])){
             $this->redirect('/site/error');
         }
-        $navInfo = SysNav::findOne($params['id']);
-        if(empty($navInfo)){
+        if(empty($params['pid'])){
             $this->redirect('/site/error');
         }
-        $navIcon=Yii::$app->params['navIcon'];//获取图标列表
-        $moduleList=$this->serviceList['NavService']->getModuleList();//获取模块列表
-        $resultInfo['moduleList']=$this->objectsToArrays($moduleList['data']);//类型转换
-        $resultInfo['navIcon']=$navIcon;
-        $resultInfo['navInfo']=$navInfo ;
+        $rbacInfo = $this->serviceList['RbacService']->getRbacInfo($params);
+        $resultInfo["params"]=$params;
+        $resultInfo["rbacInfo"]=$rbacInfo['data'];
         return $this->render('edit.tpl',$resultInfo);
     }
 
@@ -82,7 +89,7 @@ class NavController extends CommonController implements CommonInterface{
             return $this->asJson($params);
         }
         
-        $this->result = $this->serviceList['NavService']->deleteNav($params['data']);
+        $this->result = $this->serviceList['RbacService']->deleteRbac($params['data']);
         return $this->asJson($this->result);
 
     }
@@ -90,7 +97,7 @@ class NavController extends CommonController implements CommonInterface{
     //获取参数规则
     public function getRulesArray($ruleIndex){
         $result['add']=array(  
-            array('status', 'in', 'range'=>array(1,2),'message'=>'状态码错误.'),  
+            array('pid','required','message'=>'pid必须！'), 
         ); 
         
         $result['delete']=array(
@@ -99,5 +106,6 @@ class NavController extends CommonController implements CommonInterface{
         
         return $result[$ruleIndex];
     }
+    
    
 }

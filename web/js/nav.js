@@ -2,7 +2,7 @@
 function deleteNav(id) {
     layer.confirm('确认要删除吗？', function (index) {
         var ids = {0: id};
-        $(".list_" + id + " input[name='id[]']").each(function (index, element) {
+        $(".view_" + id + " input[name='id[]']").each(function (index, element) {
             ids[index + 1] = $(this).val();
         });
 
@@ -40,7 +40,15 @@ function editNav(){
     layer_tip(reInfo,1);//提示框
 }
 
-
-
+$(document).ready(function() {
+    $(".module input[name='id[]']").click(function () {
+        var id= $(this).val();
+        if ($(this).prop("checked")) {
+            $(".view_" + id + " input:checkbox").prop("checked", true); 
+        } else {
+            $(".view_" + id + " input:checkbox").prop("checked", false);
+        }    
+    });
+}); 
     
  

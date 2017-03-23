@@ -10,10 +10,12 @@ use Yii;
  * @property integer $id
  * @property integer $pid
  * @property string $name
- * @property string $icon
+ * @property integer $icon
  * @property string $path
  * @property integer $status
  * @property string $type
+ * @property integer $sort
+ * @property string $remark
  */
 class SysNav extends \yii\db\ActiveRecord
 {
@@ -31,9 +33,9 @@ class SysNav extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pid', 'status'], 'integer'],
+            [['pid', 'icon', 'status', 'sort'], 'integer'],
             [['type'], 'string'],
-            [['name', 'icon', 'path'], 'string', 'max' => 255],
+            [['name', 'path', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -50,6 +52,8 @@ class SysNav extends \yii\db\ActiveRecord
             'path' => 'Path',
             'status' => 'Status',
             'type' => 'Type',
+            'sort' => 'Sort',
+            'remark' => 'Remark',
         ];
     }
 }
