@@ -29,7 +29,9 @@ class Rbac {
     //给角色分配用户
     public function assign($roleName,$userId){ 
         $reader = Yii::$app->authManager->createRole($roleName);
-        Yii::$app->authManager->assign($reader, $userId);
+        if(empty(Yii::$app->authManager->getAssignment($roleName, $userId))){
+            Yii::$app->authManager->assign($reader, $userId);
+        }
     }
     
     //删除角色(许可)
@@ -49,6 +51,11 @@ class Rbac {
     public function  delAssign($roleName,$userId){
         $reader = Yii::$app->authManager->createRole($roleName);
         Yii::$app->authManager->revoke($reader, $userId);
+    }
+    
+    //取消该用户所有的角色分配
+    public function  delAssignAll($userId){
+        Yii::$app->authManager->revokeAll($userId);
     }
 
     //更新角色(许可)

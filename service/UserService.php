@@ -8,6 +8,11 @@ use Yii;
 use yii\db\Exception;
 class UserService extends CommonService{
     
+    public function __construct (){
+        $this->registService("RbacService");//注册权限管理实例
+        $this->registService("Rbac","app\common\\");//注册权限管理实例
+    }
+    
     //更新用户
     public function updateUser($params){
         //添加菜单操作
@@ -16,8 +21,10 @@ class UserService extends CommonService{
             if(empty($params['id'])){
                 $sysUser=new SysUser();
                 $sysUser->createtime = date("Y-m-d H:i:s");
+            
             }else{
                 $sysUser= SysUser::findOne($params['id']);
+    
             }
             
             if(!empty($params['username'])) $sysUser->username   =(string)$params['username'];
@@ -35,6 +42,11 @@ class UserService extends CommonService{
             if(!empty($params['login_num']))      $sysUser->login_num    =(int)$params['login_num'];
   
             if($sysUser->save()){
+                
+                $userId=$sysUser->attributes['id'];
+                $this->getService("Rbac")->delAssignAll($userId);//删除该角色所有的权限分配
+                $this->getService("Rbac")->assign($params['role'],$userId);//创建访问许可
+                
                 $this->result['status']=200;
                 $this->result['info']="修改成功！";
             }else{
