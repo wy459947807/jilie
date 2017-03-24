@@ -145,15 +145,11 @@ class SiteController extends CommonController implements CommonInterface{
         $this->getService("Rbac")->delRolePermission("普通用户");//删除角色
         $this->getService("Rbac")->updateRolePermission("普通用户",array("name"=>"普通用户1","description"=>"简单描述1"));//更新角色(许可)
         */
+    
         
-        $this->registService("NavService");
-        $navList=$this->getService("NavService")->getModuleList();
-        var_dump($navList);
-        
-        echo "vvv";
-        return;
+     
 
-       //return $this->render('test.tpl',array());
+       return $this->render('test.tpl',array());
     }
 
     //退出登录

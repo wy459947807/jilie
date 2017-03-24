@@ -9,12 +9,12 @@
     </head>
     <body>
         <article class="page-container">
-            <form id="editUser" class="form form-horizontal"  action="" enctype="multipart/form-data" method="post">
+            <form id="editUser" class="form form-horizontal"  action="/user/edit" enctype="multipart/form-data" method="post">
                 <input type="hidden" name="id" value="<!--{$userInfo.id}-->"/>
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text"  name="nickname" class="input-text {required:true,messages:{required:'请填写昵称！'}}" value="<!--{$userInfo.nickname}-->" placeholder="">
+                        <input type="text"  name="nickname" class="input-text " datatype="*" nullmsg="请填写昵称！" errormsg="昵称格式不正确" value="<!--{$userInfo.nickname}-->" placeholder="">
                     </div>
                 </div>
                 
@@ -82,7 +82,7 @@
 
                 <div class="row cl">
                     <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                        <input class="btn btn-primary radius" onclick="editUser()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <input class="btn btn-primary radius" onclick="$('#editUser').submit()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
                     </div>
                 </div>
             </form>

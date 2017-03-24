@@ -28,22 +28,22 @@
     <div class="header"></div>
     <div class="loginWraper">
       <div id="loginform" class="loginBox">
-         <form id="login_form"  class="form form-horizontal" action="" enctype="multipart/form-data" method="post">
+         <form id="login_form"  class="form-horizontal" action="/site/login" enctype="multipart/form-data" method="post">
           <div class="row cl">
             <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
             <div class="formControls col-xs-8">
-              <input class="input-text size-L {required:true,messages:{required:'请填写用户名！'}}" name="username" type="text"  placeholder="账户">
+              <input class="input-text size-L" datatype="*" nullmsg="请填写用户名！" errormsg="用户名格式不正确" name="username" type="text"  placeholder="账户">
             </div>
           </div>
           <div class="row cl">
             <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60e;</i></label>
             <div class="formControls col-xs-8">
-              <input  class="input-text size-L {required:true,messages:{required:'请填写密码！'}}" name="password" type="password" placeholder="密码">
+              <input  class="input-text size-L" datatype="*" nullmsg="请填写密码！" errormsg="密码格式不正确" name="password" type="password" placeholder="密码">
             </div>
           </div>
           <div class="row cl">
             <div class="formControls col-xs-8 col-xs-offset-3">
-              <input class="input-text size-L {required:true,messages:{required:'请填写验证码！'}}" name="code" required="true" type="text" placeholder="验证码"  value="" style="width:150px;">
+              <input class="input-text size-L" name="code" datatype="*" nullmsg="请填写验证码！" errormsg="验证码格式不正确" type="text" placeholder="验证码"  value="" style="width:150px;">
               <img height="40" id="captcha" src="/site/captcha" onclick="document.getElementById('captcha').src='/site/captcha?id='+Math.random()"> 
               <a id="kanbuq" href="javascript:;"  onclick="document.getElementById('captcha').src='/site/captcha?id='+Math.random()">看不清，换一张</a> 
             </div>
@@ -57,40 +57,20 @@
           </div>
           <div class="row cl">
             <div class="formControls col-xs-8 col-xs-offset-3">
-              <input name="" type="button" onclick="login()" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
-              <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+                <input name="" type="button" onclick="$('#login_form').submit()" class="btn btn-success radius size-L" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+                <input name="" type="reset" class="btn btn-default radius size-L" value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
             </div>
           </div>
         </form>
       </div>
     </div>
     <div class="footer">Copyright 你的公司名称 by H-ui.admin.v2.5</div>
-    <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/lib/jquery.form/jquery.form.min.js"></script>
-    <script type="text/javascript" src="/lib/jquery/1.9.1/jquery.metadata.js"></script>
-    <script type="text/javascript" src="/lib/jquery.validation/1.9.0/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="/lib/jquery.validation/1.9.0/validate-methods.js"></script>
-    <script type="text/javascript" src="/lib/jquery.validation/1.9.0/messages_zh.js"></script>
-    <script type="text/javascript" src="/lib/jquery.tmpl/jquery.tmpl.min.js"></script>
-    <script type="text/javascript" src="/lib/layer/2.1/layer.js"></script> 
-    <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script> 
-    <script type="text/javascript" src="/lib/My97DatePicker/WdatePicker.js"></script> 
-    <script type="text/javascript" src="/lib/public/common.js"></script> 
-    <script type="text/javascript" src="/lib/public/commonp.plug.js"></script> 
-    <script type="text/javascript" src="/static/h-ui/js/H-ui.js"></script> 
+    <!--{include file="public/foot.tpl"}-->
     
     <script>
-        //登录操作
-        function login(){
-            var reInfo = ajaxFormSubmit("#login_form",'/site/login');
-            if(reInfo){
-                layer_tip(reInfo);//提示框
-                if(reInfo.status==200){
-                    setTimeout("goPage('/site/index')",1000); 
-                }
-            } 
-            //console.log(reInfo);
-        }
+        $(document).ready(function () {
+            formInit("#login_form","/site/index");
+        });
     </script>
     
     <script>

@@ -4,46 +4,109 @@
  * and open the template in the editor.
  */
 
-var stateInfo={
-    curObj:new Object(),    //当前元素对象
-    isLock:0,               //锁定当前操作
+//表单自定义验证
+var datatype={
+    "price": /^\d+(?:\.\d{1,2})?$/,
+    "intNum": /^[1-9]\d*$/,
+    "time": /^(([01]?[0-9])|(2[0-3])):[0-5]?[0-9]$/,
+    "dateCompar": function (gets, obj, curform, regxp) {
+
+        if (gets == "") {
+            //$.Tipmsg.w['dateCompar'] = "请选择日期！";
+            return false;
+        }
+        var begintime = new Date(curform.find("input[name='begintime']").val());
+        var endtime = new Date(curform.find("input[name='endtime']").val());
+        if (begintime > endtime) {
+            //$.Tipmsg.w['dateCompar'] = "结束日期不能小于开始日期！";
+            return false;
+        }
+        return true;
+    }
 }
 
-var windowList={};//窗口句柄列表
+
+var stateInfo = {
+    curObj: new Object(), //当前元素对象
+    isLock: 0, //锁定当前操作
+}
+
+var windowList = {};//窗口句柄列表
 
 //初始化页面控件
 $(document).ready(function () {
-    
-    initSubmitForm(".form");        //初始化表单
+    formInit(".form");        //初始化表单
     $(".layer_close").click(function () {
-       layer.closeAll();
+        layer.closeAll();
     });
-    
+
 });
 
-/**
- * 绑定表单验证
- * @param {type} formId
- * @returns {undefined}
- */
-function initSubmitForm(formId){
-    $(formId).validate({
-        //重写showErrors
-        showErrors: function (errorMap, errorList) {
-            var msg = "";
-            $.each(errorList, function (i, v) {
-                //msg += (v.message + "\r\n");
-                //在此处用了layer的方法,显示效果更美观
-                v.element.focus();
-                layer.tips(v.message, v.element, { time: 2000 , tips:[3, '#c00']});
-                return false;
-            });  
+//初始化表单
+function formInit(formId, url, noAjax) {
+    var ajaxPost = true;
+    if (noAjax) {
+        ajaxPost = false;
+    }
+    $(formId).Validform({
+        tipSweep: true,
+        tiptype: function (msg, o, cssctl) {
+            if (!o.obj.is("form")) {
+                if (o.type == 3) {
+                    layer.tips(msg, o.obj, { time: 2000 , tips:[3, '#c00']});
+                }
+            }
         },
-        /* 失去焦点时不验证 */
-        onfocusout: false,
-        onkeyup:false
-    });          //初始化表单验证
+        datatype: datatype,
+        beforeSubmit: function (re) {
+        },
+        ajaxPost: ajaxPost,
+        callback: function (data) {
+            if (ajaxPost) {
+                if (data.status == 200) { 
+                    layer.alert(data.info, {title: '温馨提示', icon: 1});
+                    
+                    if (url) {
+                        window.location = url;
+                    } else {
+                        //window.location.reload();
+                    }
+                } else {
+                    layer.alert(data.info, {title: '温馨提示', icon: 2});
+                }
+            }
+
+            //window.location.reload();
+        },
+    });
+
 }
+
+
+function callBackForm(formId, template, display, append) {
+    $(formId).Validform({
+        tipSweep: true,
+        tiptype: function(msg, o, cssctl) {
+            if (!o.obj.is("form")) {
+                if (o.type == 3) {
+                    layer.tips(msg, o.obj, { time: 2000 , tips:[3, '#c00']});
+                }
+            }
+        },
+        datatype: datatype,
+        beforeSubmit: function(re) {
+        },
+        ajaxPost: true,
+        callback: function(data) {
+            if (!display) {
+                display = "return";
+            }
+            bindTemplate(data,display,template, append);
+        },
+    });
+}
+
+
 
 /**
  * 给指定模板绑定数据
@@ -52,18 +115,18 @@ function initSubmitForm(formId){
  * @param {type} tempId   模板ID
  * @returns {html}
  */
-function bindTemplate(res,boxId,tempId,append){
-    if(boxId){
+function bindTemplate(res, boxId, tempId, append) {
+    if (boxId) {
         if (res.status === 200) {
             var renderData = {};
             renderData.data = res.data;
             var list_tpl = template(tempId, renderData);
             if (!append) {
-                $('#'+boxId).html(list_tpl);
+                $('#' + boxId).html(list_tpl);
             } else {
-                $('#'+boxId).append(list_tpl);
+                $('#' + boxId).append(list_tpl);
             }
- 
+
         } else {
             console.log(res.info);
         }
@@ -77,45 +140,12 @@ function bindTemplate(res,boxId,tempId,append){
  * @param {type} tempId
  * @returns {undefined}
  */
-function dataBind(res,boxId,tempId){
+function dataBind(res, boxId, tempId,append) {
     var list_tpl = template(tempId, res);
-    $('#'+boxId).html(list_tpl);
-}
-
-/**
- * 提交AJAX表单
- * @param {type} formId 表单ID
- * @param {type} fromAction 表单提交地址
- * @returns {undefined}
- */
-function ajaxFormSubmit(formId,fromAction,boxId,tempId,append){
-   
-    if(stateInfo.isLock){
-        layer_tip("请勿重复操作！");
-        return;
-    }
-
-    if($(formId).valid()){
-        var reData={};
-        stateInfo.isLock=1;
-        var dataInfo=$(formId).serializeObject();
-        $.ajax({
-            url: fromAction,
-            type: 'post',
-            data:dataInfo,
-            dataType: "json",
-            async: false,
-            success: function (res) {
-                bindTemplate(res,boxId,tempId,append);
-                reData=res;
-                stateInfo.isLock=0;
-            },
-            error: function () {
-                stateInfo.isLock=0;
-                layer_tip("数据加载错误！");
-            }
-        });
-        return reData;
+    if (!append) {
+        $('#' + boxId).html(list_tpl);
+    } else {
+        $('#' + boxId).append(list_tpl);
     }
 }
 
@@ -127,17 +157,17 @@ function ajaxFormSubmit(formId,fromAction,boxId,tempId,append){
  * @param {type} boxId    显示板块ID
  * @returns {html}
  */
-function getTemplate(dataInfo,ajaxUrl,boxId,tempId,append){
-    var reData={};
+function getTemplate(dataInfo, ajaxUrl, boxId, tempId, append) {
+    var reData = {};
     $.ajax({
         url: ajaxUrl,
         type: 'post',
-        data:dataInfo,
+        data: dataInfo,
         dataType: "json",
         async: false,
         success: function (res) {
-            bindTemplate(res,boxId,tempId,append);
-            reData=res;
+            bindTemplate(res, boxId, tempId, append);
+            reData = res;
         },
         error: function () {
             layer_tip("数据加载错误！");
@@ -154,7 +184,7 @@ function getTemplate(dataInfo,ajaxUrl,boxId,tempId,append){
  * @param {type} height 窗口高度
  * @returns {html}
  */
-function getLayerTemplate(winId,width,height,title,zIndex){
+function getLayerTemplate(winId, width, height, title, zIndex) {
     if (!zIndex) {
         zIndex = 1000;
     }
@@ -164,10 +194,10 @@ function getLayerTemplate(winId,width,height,title,zIndex){
         shadeClose: true,
         zIndex: zIndex,
         shade: 0.3,
-        area: [width+'px', height+'px'],
-        content: $('#'+winId)
-    }); 
-    
+        area: [width + 'px', height + 'px'],
+        content: $('#' + winId)
+    });
+
     if (winId) {
         windowList[winId] = layerName;//注册窗口
     }
@@ -181,6 +211,42 @@ function getLayerTemplate(winId,width,height,title,zIndex){
 function closeWindow(windowId) {
     layer.close(windowList[windowId]);
 }
+
+
+//页面跳转
+function goPage(url) {
+    window.location.href = url;
+}
+
+/**
+ * 获取url参数值
+ * @param {string} url 需要获取参数的url
+ * @param {string} name 需要获取的参数名
+ * @return {string} 返回获取的参数名
+ */
+function getUrlParam(name, url) {
+    if (!name) {
+        return '';
+    }
+    url = url || location.search;
+    name = name.replace(/(?=[\\^$*+?.():|{}])/, '\\');
+    var reg = new RegExp('(?:[?&]|^)' + name + '=([^?&#]*)', 'i');
+    var match = url.match(reg);
+    return !match ? '' : match[1];
+}
+
+//页面跳转
+function jumpPage(dataInfo) {
+    var myurl = new LG.URL(window.location.href);
+
+    for (var index in dataInfo) {
+        myurl.set(index, dataInfo[index]);
+    }
+
+    //alert (myurl.url());
+    window.location.href = myurl.url();
+}
+
 
 /**
  * 提示框
@@ -205,38 +271,3 @@ function layer_tip(reInfo,refresh){
     }
 	
 }
-
-//页面跳转
-function goPage(url){
-    window.location.href=url;
-}
-
-/**
-* 获取url参数值
-* @param {string} url 需要获取参数的url
-* @param {string} name 需要获取的参数名
-* @return {string} 返回获取的参数名
-*/
-function getUrlParam(name, url) {
-    if (!name) {
-            return '';
-    }
-    url = url || location.search;
-    name = name.replace(/(?=[\\^$*+?.():|{}])/, '\\');
-    var reg = new RegExp('(?:[?&]|^)' + name + '=([^?&#]*)', 'i');
-    var match = url.match(reg);
-    return !match ? '' : match[1];
-}
-
-//页面跳转
-function jumpPage(dataInfo){
-    var myurl=new LG.URL(window.location.href);
-
-    for (var index in dataInfo){
-        myurl.set(index,dataInfo[index]);
-    }
-
-    //alert (myurl.url());
-    window.location.href=myurl.url();
-}
-

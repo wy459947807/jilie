@@ -9,14 +9,14 @@
     </head>
     <body>
         <article class="page-container">
-            <form action="" method="post" class="form form-horizontal" id="editNav">
+            <form action="/nav/edit" method="post" class="form form-horizontal" id="editNav">
                 <input type="hidden" name="id" value="<!--{$navInfo.id}-->"/>
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3">
                         <span class="c-red">*</span>菜单名称：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="name" type="text"  value="<!--{$navInfo.name}-->"  class="input-text {required:true,messages:{required:'请填写菜单名称！'}}" placeholder="" >
+                        <input  name="name" type="text"  value="<!--{$navInfo.name}-->"  class="input-text" datatype="*" nullmsg="请填写菜单名！" errormsg="菜单名格式不正确" placeholder="" >
                     </div>
                 </div>
                     
@@ -43,7 +43,7 @@
                         <span class="c-red">*</span>栏目路径：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="path" value="<!--{$navInfo.path}-->" type="text"  class="input-text {required:true,messages:{required:'请填写栏目路径！'}}"  placeholder="" >
+                        <input  name="path" value="<!--{$navInfo.path}-->" type="text"  class="input-text"  datatype="*" nullmsg="请填写栏目路径！" errormsg="栏目路径格式不正确"  placeholder="" >
                     </div>
                 </div>
                     
@@ -52,7 +52,7 @@
                         <span class="c-red">*</span>排序：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="sort"  value="<!--{$navInfo.sort}-->" type="text"  class="input-text {number:true,messages:{number:'请填写数字！'}}"  placeholder="" >
+                        <input  name="sort"  value="<!--{$navInfo.sort}-->" type="text"  class="input-text" datatype="n"  errormsg="请填写数字！" ignore="ignore"  placeholder="" >
                     </div>
                 </div> 
 
@@ -97,7 +97,7 @@
                 </div>
                 <div class="row cl">
                     <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                        <input class="btn btn-primary radius" onclick="editNav()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <input class="btn btn-primary radius" onclick="$('#editNav').submit()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
                     </div>
                 </div>
             </form>

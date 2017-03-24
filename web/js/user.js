@@ -53,7 +53,7 @@ function changePassword(){
 function changePasswordBox(dataInfo){
     getTemplate(dataInfo,'/user/userinfo',"changePasswordBox","changePassword_tpl");
     getLayerTemplate("changePasswordBox",500,300,"修改密码",1000);
-    initSubmitForm("#changePassword");   //初始化表单
+    formInit("#changePassword");   //初始化表单
 }
 
 

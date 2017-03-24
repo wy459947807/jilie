@@ -9,25 +9,25 @@
     </head>
     <body>
         <article class="page-container">
-            <form id="addUser" class="form form-horizontal"  action="" enctype="multipart/form-data" method="post">
+            <form id="addUser" class="form form-horizontal"  action="/user/add" enctype="multipart/form-data" method="post">
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>用户名：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" name="username" class="input-text {required:true,messages:{required:'请填写用户名！'}}" value="" placeholder="">
+                        <input type="text" name="username" class="input-text" datatype="*" nullmsg="请填写用户名！" errormsg="用户名格式不正确"  value="" placeholder="">
                     </div>
                 </div>
                 
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>密码：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="password" id="password"  name="" class="input-text {required:true,messages:{required:'请填写密码！'}}" value="" placeholder="">
+                        <input type="password"   name="pwd" class="input-text" datatype="*" nullmsg="请填写密码！" errormsg="密码格式不正确"  value="" placeholder="">
                     </div>
                 </div>
                 
                  <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>确认密码：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="password"  name="password" class="input-text {equalTo: '#password',messages:{equalTo:'两次密码不一致！'}} " value="" placeholder="">
+                        <input type="password"  name="password" class="input-text " recheck="pwd"  datatype="*" nullmsg="请确认密码！" errormsg="两次密码不一致！"  value="" placeholder="">
                     </div>
                 </div>
                 <div style="height: 30px">
@@ -36,7 +36,7 @@
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>昵称：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text"  name="nickname" class="input-text {required:true,messages:{required:'请填写昵称！'}}" value="" placeholder="">
+                        <input type="text"  name="nickname" class="input-text"  datatype="*" nullmsg="请填写昵称！" errormsg="昵称格式不正确"  value="" placeholder="">
                     </div>
                 </div>
                 
@@ -104,7 +104,7 @@
 
                 <div class="row cl">
                     <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                        <input class="btn btn-primary radius" onclick="addUser()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <input class="btn btn-primary radius" onclick="$('#addUser').submit()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
                     </div>
                 </div>
             </form>

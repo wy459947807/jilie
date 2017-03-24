@@ -12,6 +12,8 @@ use Yii;
  * @property string $name
  * @property integer $sort
  * @property string $remark
+ *
+ * @property SysUser[] $sysUsers
  */
 class SysUserGroup extends \yii\db\ActiveRecord
 {
@@ -46,5 +48,13 @@ class SysUserGroup extends \yii\db\ActiveRecord
             'sort' => 'Sort',
             'remark' => 'Remark',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSysUsers()
+    {
+        return $this->hasMany(SysUser::className(), ['role' => 'name']);
     }
 }

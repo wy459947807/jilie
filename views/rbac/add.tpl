@@ -9,14 +9,14 @@
     </head>
     <body>
         <article class="page-container">
-            <form action="" method="post" class="form form-horizontal" id="addRbac">
+            <form action="/rbac/add" method="post" class="form form-horizontal" id="addRbac">
                 <input type="hidden" name="pid" value="<!--{$params.pid}-->"/>
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3">
                         <span class="c-red">*</span>菜单名称：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="name" type="text"  class="input-text {required:true,messages:{required:'请填写权限名称！'}}" value="" placeholder="" >
+                        <input  name="name" type="text"  class="input-text" datatype="*" nullmsg="请填写权限名称！" errormsg="权限名称格式不正确" value="" placeholder="" >
                     </div>
                 </div>
     
@@ -25,7 +25,7 @@
                         <span class="c-red">*</span>操作路径：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="path" type="text"  class="input-text {required:true,messages:{required:'请填写操作路径！'}}" value="" placeholder="" >
+                        <input  name="path" type="text"  class="input-text " datatype="*" nullmsg="请填写操作路径！" errormsg="操作路径格式不正确" value="" placeholder="" >
                     </div>
                 </div>
                     
@@ -34,7 +34,7 @@
                         <span class="c-red">*</span>排序：
                     </label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input  name="sort" type="text"  class="input-text {number:true,messages:{number:'请填写数字！'}}" value="0" placeholder="" >
+                        <input  name="sort" type="text"  class="input-text " datatype="n"  errormsg="请填写数字！" ignore="ignore" value="0" placeholder="" >
                     </div>
                 </div> 
 
@@ -47,7 +47,7 @@
                 </div>
                 <div class="row cl">
                     <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-                        <input class="btn btn-primary radius" onclick="addRbac()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                        <input class="btn btn-primary radius" onclick="$('#addRbac').submit()" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
                     </div>
                 </div>
             </form>
