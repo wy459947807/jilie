@@ -11,116 +11,58 @@
     <body>
         <article class="page-container">
             <form id="editUserGroup" class="form form-horizontal"  action="/usergroup/edit" enctype="multipart/form-data" method="post">
-                <input type="hidden" name="id" value="<!--{$userGroupInfo.id}-->" />
+                <input type="hidden" name="id" value="<!--{$userGroupInfo.id}-->"/>
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分组名称：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" name="name" value="<!--{$userGroupInfo.name}-->"  class="input-text" placeholder="" datatype="*4-16" nullmsg="分组名称不能为空"  errormsg="分组名称格式不正确">
+                        <input type="text" name="name"  class="input-text" value="<!--{$userGroupInfo.name}-->" placeholder="" datatype="*4-16" nullmsg="分组名称不能为空" errormsg="分组名称格式不正确">
                     </div>
                 </div>
                 <div class="row cl">
                     <label class="form-label col-xs-4 col-sm-3">备注：</label>
                     <div class="formControls col-xs-8 col-sm-9">
-                        <input type="text" name="remark" value="<!--{$userGroupInfo.remark}-->"  id="" class="input-text"  placeholder="">
+                        <input type="text" name="remark"  id="" class="input-text" value="<!--{$userGroupInfo.remark}-->" placeholder="">
                     </div>
                 </div>
                 
                 
                 <div class="row cl">
-                    <label class="form-label col-xs-4 col-sm-3">网站角色：</label>
+                    <label class="form-label col-xs-4 col-sm-3">分组权限：</label>
                     <div class="formControls col-xs-8 col-sm-9">
+                        <!--{foreach $rbacTree.list as $key=>$val}-->
                         <dl class="permission-list">
                             <dt>
                                 <label>
-                                    <input type="checkbox" value="" name="user-Character-0" id="user-Character-0">
-                                    资讯管理</label>
+                                    <input type="checkbox" <!--{if isset($userRoleList[$val.name])}--> checked="checked" <!--{/if}--> value="<!--{$val.name}-->" name="rbac[]" id="user-Character-<!--{$key}-->">
+                                    <!--{$val.name}-->
+                                </label>
                             </dt>
                             <dd>
+                                
+                                <!--{if !empty($val['child']['list'])}-->
+                                <!--{foreach $val.child.list as $k=>$v}-->
                                 <dl class="cl permission-list2">
                                     <dt>
                                         <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0" id="user-Character-0-0">
-                                            栏目管理</label>
+                                            <input type="checkbox" <!--{if isset($userRoleList[$v.name])}--> checked="checked" <!--{/if}--> value="<!--{$v.name}-->" name="rbac[]" id="user-Character-<!--{$key}-->-<!--{$k}-->">
+                                            <!--{$v.name}--></label>
                                     </dt>
                                     <dd>
+                                        <!--{if !empty($v['child']['list'])}-->
+                                        <!--{foreach $v.child.list as $i=>$n}-->
                                         <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
-                                            添加</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
-                                            修改</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
-                                            删除</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
-                                            查看</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-4">
-                                            审核</label>
-                                        
+                                            <input type="checkbox" <!--{if isset($userRoleList[$n.path])}--> checked="checked" <!--{/if}--> value="<!--{$n.path}-->" name="rbac[]" id="user-Character-<!--{$key}-->-<!--{$k}-->-<!--{$i}-->">
+                                            <!--{$n.name}--></label>
+                                        <!--{/foreach}-->
+                                        <!--{/if}-->
                                     </dd>
                                 </dl>
-                                <dl class="cl permission-list2">
-                                    <dt>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1" id="user-Character-0-1">
-                                            文章管理</label>
-                                    </dt>
-                                    <dd>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-0">
-                                            添加</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-1">
-                                            修改</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-2">
-                                            删除</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-3">
-                                            查看</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-0-1-0" id="user-Character-0-1-4">
-                                            审核</label>
-                                        
-                                    </dd>
-                                </dl>
+                                <!--{/foreach}-->
+                                <!--{/if}-->
                             </dd>
                         </dl>
-                        <dl class="permission-list">
-                            <dt>
-                                <label>
-                                    <input type="checkbox" value="" name="user-Character-0" id="user-Character-1">
-                                    用户中心</label>
-                            </dt>
-                            <dd>
-                                <dl class="cl permission-list2">
-                                    <dt>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0" id="user-Character-1-0">
-                                            用户管理</label>
-                                    </dt>
-                                    <dd>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-0">
-                                            添加</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-1">
-                                            修改</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-2">
-                                            删除</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-3">
-                                            查看</label>
-                                        <label class="">
-                                            <input type="checkbox" value="" name="user-Character-1-0-0" id="user-Character-1-0-4">
-                                            审核</label>
-                                    </dd>
-                                </dl>
-                            </dd>
-                        </dl>
+                        <!--{/foreach}-->
+ 
                     </div>
                 </div>
                 <div class="row cl">

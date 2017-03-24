@@ -43,7 +43,7 @@
                                 <tbody> 
                                     <tr>
                                         <th  style="text-align: left;">   
-                                             <span>地址：</span><input name="address" class="search-item-input" value="" type="text" style=" width: 284px;"  datatype="*"   nullmsg="请选择填写地址!"/>
+                                             <span>地址：</span><input name="address" class="search-item-input" value="" type="password" style=" width: 284px;"  datatype="*"   nullmsg="请选择填写地址!"/>
                                         </th>
                                     </tr>
                                 </tbody>
@@ -70,14 +70,81 @@
         <script type="text/javascript" src="/lib/laypage/1.2/laypage.js"></script> 
         <script type="text/javascript" src="/lib/My97DatePicker/WdatePicker.js"></script> 
         <script type="text/javascript" src="/lib/public/LG.js"></script>
-        <script type="text/javascript" src="/lib/public/common1.js"></script>
+        
        
         <script type="text/javascript" src="/static/h-ui/js/H-ui.js"></script> 
         <script type="text/javascript" src="/static/h-ui.admin/js/H-ui.admin.js"></script>
         
         <script>
-            
-            
+          //表单自定义验证
+        var datatype={
+            "price": /^\d+(?:\.\d{1,2})?$/,
+            "intNum": /^[1-9]\d*$/,
+            "time": /^(([01]?[0-9])|(2[0-3])):[0-5]?[0-9]$/,
+            "dateCompar": function (gets, obj, curform, regxp) {
+
+                if (gets == "") {
+                    //$.Tipmsg.w['dateCompar'] = "请选择日期！";
+                    return false;
+                }
+                var begintime = new Date(curform.find("input[name='begintime']").val());
+                var endtime = new Date(curform.find("input[name='endtime']").val());
+                if (begintime > endtime) {
+                    //$.Tipmsg.w['dateCompar'] = "结束日期不能小于开始日期！";
+                    return false;
+                }
+                return true;
+            }
+        }  
+              //初始化表单
+        function formInit(formId, url, noAjax) {
+            var ajaxPost = true;
+            if (noAjax) {
+                ajaxPost = false;
+            }
+            $(formId).Validform({
+                tipSweep: true,
+                tiptype: function (msg, o, cssctl) {
+                    if (!o.obj.is("form")) {
+                        if (o.type == 3) {
+                            layer.tips(msg, o.obj, { time: 2000 , tips:[3, '#c00']});
+                        }
+                    }
+                },
+                datatype: datatype,
+                beforeSubmit: function (re) {
+                    $(re).find("input[name='address']").val("666");
+                    alert('eee');
+                },
+                ajaxPost: ajaxPost,
+                callback: function (data) {
+                    if (ajaxPost) {
+                        if (data.status == 200) { 
+                            layer.alert(data.info, {title: '温馨提示', icon: 1});
+
+                            if (url) {
+                                window.location = url;
+                            } else {
+                                //window.location.reload();
+                            }
+                        } else {
+                            layer.alert(data.info, {title: '温馨提示', icon: 2});
+                        }
+                    }
+
+                    //window.location.reload();
+                },
+            });
+
+        }
+        
+        //初始化页面控件
+        $(document).ready(function () {
+            formInit(".form");        //初始化表单
+         
+
+        });
+
            
         </script>
 

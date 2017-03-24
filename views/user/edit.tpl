@@ -50,10 +50,9 @@
                     <label class="form-label col-xs-4 col-sm-3">角色：</label>
                     <div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
                             <select class="select" size="1" name="role">
-                                <option value="" selected>请选择角色</option>
-                                <option value="1">角色1</option>
-                                <option value="2">角色2</option>
-                                <option value="3">角色3</option>
+                                <!--{foreach $userGroupList as $key=>$val}-->
+                                <option <!--{if $userInfo.role==$val.name}--> selected <!--{/if}-->  value="<!--{$val.name}-->"><!--{$val.name}--></option>
+                                <!--{/foreach}-->
                             </select>
                         </span> </div>
                 </div>

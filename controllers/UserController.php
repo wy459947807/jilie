@@ -10,6 +10,7 @@ class UserController extends CommonController implements CommonInterface{
         parent::init();
         //注册服务
         $this->registService("UserService");//注册用户服务
+        $this->registService("UserGroupService");//注册用户服务
     }
     
     //列表信息
@@ -20,7 +21,7 @@ class UserController extends CommonController implements CommonInterface{
         return $this->render('index.tpl',$resultInfo);
     }
     
-    //添加导航
+    //添加用户
     public function actionAdd(){
         //页面操作
         if(Yii::$app->request->isPost){
@@ -31,8 +32,9 @@ class UserController extends CommonController implements CommonInterface{
             $this->result = $this->getService("UserService")->updateUser($params['data']);
             return $this->asJson($this->result);
         }
-        
-        $resultInfo=array();
+
+        $userGroupList=$this->getService("UserGroupService")->getUserGroupAll();
+        $resultInfo["userGroupList"]=$userGroupList['data'];
         return $this->render('add.tpl',$resultInfo);
     }
 
@@ -54,6 +56,8 @@ class UserController extends CommonController implements CommonInterface{
             $this->redirect('/site/error');
         }
         $userInfo=$this->result = $this->getService("UserService")->getUserInfo($params);
+        $userGroupList=$this->getService("UserGroupService")->getUserGroupAll();
+        $resultInfo["userGroupList"]=$userGroupList['data'];
         $resultInfo['userInfo']=$userInfo['data'];
         return $this->render('edit.tpl',$resultInfo);
     }

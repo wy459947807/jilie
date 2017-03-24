@@ -21,7 +21,9 @@ class Rbac {
     public function createEmpowerment($parentName,$childName){
         $parent = Yii::$app->authManager->createRole($parentName);
         $child = Yii::$app->authManager->createPermission($childName);
-        Yii::$app->authManager->addChild($parent, $child);
+        if(!Yii::$app->authManager->hasChild($parent, $child)){
+            Yii::$app->authManager->addChild($parent, $child);
+        }
     }
     
     //给角色分配用户
@@ -55,5 +57,10 @@ class Rbac {
         $role->name = $dataArray['name'];
         $role->description = $dataArray['description'];
         Yii::$app->authManager->update($name,$role);
+    }
+    
+    //获取权限分配列表
+    public function getEmpowerment($name){
+        return Yii::$app->authManager->getChildren($name);
     }
 }

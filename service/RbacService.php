@@ -147,4 +147,20 @@ class RbacService extends CommonService{
         
     }
     
+    public function getRbacAll($params){
+        $this->sqlFrom=" sys_nav ";        
+        $this->sqlField=" * ";       
+        $this->sqlWhere=" (1=1) ";
+        $this->bindValues=array();
+        
+        //列表筛选
+        if(!empty($params['pid'])){
+            $this->sqlWhere.=" and pid=:pid ";
+            $this->bindValues[':pid'] = $params['pid'];
+        }
+        return $this->getAll();
+    }
+    
+    
+    
 }

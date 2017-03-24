@@ -10,6 +10,8 @@ class UsergroupController extends CommonController implements CommonInterface{
         parent::init();
         //注册服务
         $this->registService("UserGroupService");//注册用户服务
+        $this->registService("RbacService");//注册用户服务
+        $this->registService("Rbac","app\common\\");//注册权限管理实例
     }
     
     //列表信息
@@ -32,7 +34,9 @@ class UsergroupController extends CommonController implements CommonInterface{
             return $this->asJson($this->result);
         }
         
-        $resultInfo=array();
+        $rbacList=$this->getService("RbacService")->getRbacAll(array());
+        $rbacTree=$this->getListTree($rbacList['data']);
+        $resultInfo['rbacTree']=$rbacTree;
         return $this->render('add.tpl',$resultInfo);
     }
 
@@ -53,8 +57,15 @@ class UsergroupController extends CommonController implements CommonInterface{
         if(empty($params['id'])){
             $this->redirect('/site/error');
         }
+        $rbacList=$this->getService("RbacService")->getRbacAll(array());//权限列表
+        $rbacTree=$this->getListTree($rbacList['data']);//权限列表
         $userInfo=$this->result = $this->getService("UserGroupService")->getUserGroupInfo($params);
+        $userRoleList=$this->getService("Rbac")->getEmpowerment($userInfo['data']['name']);
+        
         $resultInfo['userGroupInfo']=$userInfo['data'];
+        $resultInfo['rbacTree']=$rbacTree;
+        $resultInfo['userRoleList']=$userRoleList;
+        
         return $this->render('edit.tpl',$resultInfo);
     }
 
