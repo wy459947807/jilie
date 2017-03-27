@@ -170,7 +170,7 @@ function getTemplate(dataInfo, ajaxUrl, boxId, tempId, append) {
             reData = res;
         },
         error: function () {
-            layer_tip("数据加载错误！");
+            return ;
         }
     });
     return reData;
@@ -253,14 +253,15 @@ function jumpPage(dataInfo) {
  * @returns {undefined}
  */
 function layer_tip(reInfo,refresh){ 
+   
     if(!reInfo) return;
     var msg="出现错误，请重试！%>_<%";
     var icon=2;
     if (reInfo) {
-        msg =reInfo.info;
+        msg =reInfo.info?reInfo.info:"您无权操作！";
         icon=reInfo.status==200 ? 1 : 2;
     }
-    
+  
     layer.alert(msg, {
         title: '温馨提示',
         icon: icon

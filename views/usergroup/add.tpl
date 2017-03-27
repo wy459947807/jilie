@@ -49,7 +49,7 @@
                                     <dd>
                                         <!--{if !empty($v['child']['list'])}-->
                                         <!--{foreach $v.child.list as $i=>$n}-->
-                                        <label class="">
+                                        <label class="" style=" display: block; float: left;">
                                             <input type="checkbox" value="<!--{$n.path}-->" name="rbac[]" id="user-Character-<!--{$key}-->-<!--{$k}-->-<!--{$i}-->">
                                             <!--{$n.name}--></label>
                                         <!--{/foreach}-->

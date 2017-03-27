@@ -70,4 +70,10 @@ class Rbac {
     public function getEmpowerment($name){
         return Yii::$app->authManager->getChildren($name);
     }
+    
+    
+    //获取该用户的权限列表
+    public function getAssignList($userId){
+        return Yii::$app->authManager->getPermissionsByUser($userId);
+    }
 }

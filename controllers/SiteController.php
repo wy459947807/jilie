@@ -37,12 +37,18 @@ class SiteController extends CommonController implements CommonInterface{
     
     
     public function actionIndex(){
+        
+        $userInfo=Yii::$app->user->getIdentity();//用户登录信息
+        $assignList=$this->getService("Rbac")->getAssignList($userInfo->id);
+      
+        
         $navIcon=Yii::$app->params['navIcon'];//获取图标列表
         $navList=$this->getService("NavService")->getNavList();//获取菜单列表
         $navArray=$this->objectsToArrays($navList['data']);//类型转换
         $navTree=$this->getListTree($navArray);
         $resultInfo['navIcon']=$navIcon;
         $resultInfo['navTree']=$navTree;
+        $resultInfo['assignList']=$assignList;
         return $this->render('index.tpl',$resultInfo);
     }
     

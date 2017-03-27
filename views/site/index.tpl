@@ -74,18 +74,22 @@
             <div class="menu_dropdown bk_2">
                 
                 <!--{foreach $navTree.list as $key=>$val}-->
+                <!--{if isset($assignList[$val.name])}-->
                 <dl>
                     <dt><i class="Hui-iconfont"><!--{$navIcon[$val.icon]}--></i> <!--{$val.name}--><i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
                     <dd>
                         <ul>
                             <!--{if !empty($val['child']['list'])}-->
                             <!--{foreach $val.child.list as $k=>$v}-->
+                            <!--{if isset($assignList[$v.name])}-->
                             <li><a data-href="<!--{$v.path}-->" data-title="<!--{$v.name}-->" href="javascript:void(0)"><!--{$v.name}--></a></li>
+                            <!--{/if}-->
                             <!--{/foreach}-->
                             <!--{/if}-->
                         </ul>
                     </dd>
                 </dl>
+                <!--{/if}-->
                 <!--{/foreach}-->
             </div>
         </aside>

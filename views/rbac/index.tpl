@@ -11,7 +11,7 @@
 
             <div class="text-c">
                 <span class="select-box " style="width:150px">
-                    <select class="select" name="module" onchange="jumpPage({module:this.value})" size="1">
+                    <select class="select" name="module" onchange="jumpPage({module:this.value,view:0})" size="1">
                         <!--{foreach $data.moduleList as $key=>$val}-->
                         <!--{if isset($data.params.module)&&$data.params.module==$val.id}-->
                             <option selected value="<!--{$val.id}-->"><!--{$val.name}--></option>
@@ -53,7 +53,7 @@
                             <th width="25"><input type="checkbox" name="" value=""></th>
                             <th width="80">ID</th>
                             <th width="100">操作名</th>
-                            <th width="40">操作路径</th>
+                            <th width="100">操作路径</th>
                             <th width="90">描述</th>
                             <th width="100">操作</th>
                         </tr>

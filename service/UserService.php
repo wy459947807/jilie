@@ -42,11 +42,11 @@ class UserService extends CommonService{
             if(!empty($params['login_num']))      $sysUser->login_num    =(int)$params['login_num'];
   
             if($sysUser->save()){
-                
-                $userId=$sysUser->attributes['id'];
-                $this->getService("Rbac")->delAssignAll($userId);//删除该角色所有的权限分配
-                $this->getService("Rbac")->assign($params['role'],$userId);//创建访问许可
-                
+                if(!empty($params['username'])){
+                    $userId=$sysUser->attributes['id'];
+                    $this->getService("Rbac")->delAssignAll($userId);//删除该角色所有的权限分配
+                    $this->getService("Rbac")->assign($params['role'],$userId);//创建访问许可
+                }
                 $this->result['status']=200;
                 $this->result['info']="修改成功！";
             }else{

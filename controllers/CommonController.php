@@ -13,7 +13,7 @@ use yii\httpclient\Request;
 use yii\httpclient\RequestEvent;
 use app\common\Rbac;
 use app\common\InstanceFactory;
-
+use app\filters\RbacFilter;
 class CommonController extends Controller {
     public $serviceList=array();//服务列表
     public $layout = false; //禁用yii默认布局
@@ -22,6 +22,17 @@ class CommonController extends Controller {
         "info" => "操作成功！",
         "data" => ""
     );//返回数据格式
+    
+    
+    //rbac权限过滤
+    public function behaviors() {
+        return [
+            'rbac' => [
+                'class' => RbacFilter::className(),
+            ]
+        ];
+    }
+    
     
     //参数验证
     public function paramsValidate($paramsArray, $rulesArray) {
